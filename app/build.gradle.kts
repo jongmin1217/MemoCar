@@ -52,6 +52,14 @@ android {
 }
 
 dependencies {
+    api(project(":core:ui"))
+    api(project(":core:common"))
+    api(project(":core:data"))
+    api(project(":core:model"))
+    api(project(":feature:dashboard"))
+    api(project(":feature:category"))
+    api(project(":feature:car"))
+    api(project(":feature:brand"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -78,4 +86,5 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.coil)
     implementation(libs.bundles.compose)
+    implementation(libs.androidx.metrics)
 }

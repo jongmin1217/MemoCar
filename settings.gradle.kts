@@ -12,7 +12,7 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -22,4 +22,15 @@ dependencyResolutionManagement {
 
 rootProject.name = "MemoCar"
 include(":app")
- 
+include(":core")
+include(":core:data")
+include(":core:database")
+include(":core:domain")
+include(":core:model")
+include(":core:common")
+include(":feature")
+include(":feature:dashboard")
+include(":feature:car")
+include(":feature:brand")
+include(":core:ui")
+include(":feature:category")
