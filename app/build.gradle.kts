@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
 }
 
 android {
@@ -12,7 +14,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -66,4 +68,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.dagger.hilt)
+    kapt(libs.dagger.hilt.compiler)
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.viewmodel)
+    implementation(libs.okhttp3.okhttp)
+    implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.coil)
+    implementation(libs.bundles.compose)
 }
