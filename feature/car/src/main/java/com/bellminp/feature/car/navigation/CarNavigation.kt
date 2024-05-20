@@ -12,11 +12,10 @@ const val CAR_ROUTE = "car_route"
 fun NavController.navigateToCar(navOptions: NavOptions? = null) = navigate(CAR_ROUTE,navOptions)
 
 fun NavGraphBuilder.carScreen(
-    onBackClick: () -> Unit,
-    onSaveClick: () -> Unit
+    onBackClick: () -> Unit
 ) {
 
     composable(route = CAR_ROUTE) {
-        CarRoute(onBackClick = onBackClick, onSaveClick = onSaveClick)
+        CarRoute(onBackClick = onBackClick)
     }
 }

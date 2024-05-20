@@ -10,12 +10,8 @@ const val BRAND_ROUTE = "brand_route"
 
 fun NavController.navigateToBrand(navOptions: NavOptions? = null) = navigate(BRAND_ROUTE,navOptions)
 
-fun NavGraphBuilder.brandScreen(
-    onBackClick: () -> Unit,
-    onSaveClick: () -> Unit
-) {
-
+fun NavGraphBuilder.brandScreen() {
     composable(route = BRAND_ROUTE) {
-        BrandRoute(onBackClick = onBackClick, onSaveClick = onSaveClick)
+        BrandRoute()
     }
 }

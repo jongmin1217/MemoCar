@@ -11,14 +11,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BrandRoute(
-    onBackClick : () -> Unit,
-    onSaveClick : () -> Unit,
     modifier: Modifier = Modifier
 ){
-    Column(
-        modifier = modifier
-    ) {
-        Text(text = "this screen is brand", modifier = Modifier.clickable { onSaveClick.invoke() })
-        Text(text = "back", modifier = Modifier.padding(top = 100.dp).clickable { onBackClick.invoke() })
-    }
+
 }

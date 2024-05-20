@@ -11,6 +11,8 @@ import com.bellminp.feature.category.navigation.categoryScreen
 import com.bellminp.feature.dashboard.navigation.DASHBOARD_GRAPH_ROUTE_PATTERN
 import com.bellminp.feature.dashboard.navigation.DASHBOARD_ROUTE
 import com.bellminp.feature.dashboard.navigation.dashboardGraph
+import com.bellminp.feature.detail.navigation.detailScreen
+import com.bellminp.feature.detail.navigation.navigateToDetail
 import com.bellminp.memocar.ui.MemoAppState
 
 @Composable
@@ -26,22 +28,17 @@ fun MemoCarNavHost(
         modifier = modifier,
     ){
         dashboardGraph(
+            onItemClick = navController::navigateToDetail,
             nestedGraphs = {
-                carScreen(
-                    onBackClick = navController::popBackStack,
-                    onSaveClick = navController::popBackStack
-                )
-
-                brandScreen(
-                    onBackClick = navController::popBackStack,
-                    onSaveClick = navController::popBackStack
-                )
-
-                categoryScreen(
-                    onBackClick = navController::popBackStack,
-                    onSaveClick = navController::popBackStack
+                detailScreen(
+                    onBackClick = navController::popBackStack
                 )
             }
+        )
+        brandScreen()
+        categoryScreen()
+        carScreen(
+            onBackClick = navController::popBackStack
         )
     }
 }

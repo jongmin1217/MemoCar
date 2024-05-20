@@ -11,10 +11,7 @@ const val CATEGORY_ROUTE = "category_route"
 
 fun NavController.navigateToCategory(navOptions: NavOptions? = null) = navigate(CATEGORY_ROUTE,navOptions)
 
-fun NavGraphBuilder.categoryScreen(
-    onBackClick: () -> Unit,
-    onSaveClick: () -> Unit
-) {
+fun NavGraphBuilder.categoryScreen() {
 
     composable(route = CATEGORY_ROUTE) {
         CategoryRoute()

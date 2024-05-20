@@ -29,6 +29,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -53,6 +54,7 @@ android {
 
 dependencies {
     api(project(":core:ui"))
+    api(project(":core:designsystem"))
     api(project(":core:common"))
     api(project(":core:data"))
     api(project(":core:model"))
@@ -60,6 +62,7 @@ dependencies {
     api(project(":feature:category"))
     api(project(":feature:car"))
     api(project(":feature:brand"))
+    api(project(":feature:detail"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -87,4 +90,6 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.bundles.compose)
     implementation(libs.androidx.metrics)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
 }

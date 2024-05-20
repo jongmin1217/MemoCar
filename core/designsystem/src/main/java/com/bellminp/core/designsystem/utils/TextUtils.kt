@@ -1,9 +1,10 @@
-package com.bellminp.core.ui
+package com.bellminp.core.designsystem.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+
 
 val Dp.textSp: TextUnit
     @Composable get() = with(LocalDensity.current) {

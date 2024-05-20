@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MemoCar</string>
+    <string name="add_car">차량 추가</string>
+    <string name="add_brand">브랜드 추가</string>
+    <string name="add_category">카테고리 추가</string>
+    <string name="add">Add</string>
+    <string name="save">저장</string>
 </resources>

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
     kotlin("kapt")
 }
 
@@ -32,8 +33,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     annotationProcessor(libs.room.compiler)
+    ksp(libs.room.compiler)
     implementation(libs.bundles.room)
     implementation(libs.dagger.hilt)
+    implementation(libs.kotlinx.datetime)
     kapt(libs.dagger.hilt.compiler)
 
 }
