@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
@@ -26,11 +29,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,10 +44,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bellminp.core.common.result.Result
+import com.bellminp.core.designsystem.component.AddBtn
 import com.bellminp.core.designsystem.utils.keyboardAsState
 import com.bellminp.core.designsystem.utils.textSp
+import com.bellminp.core.model.data.Category
+import com.bellminp.core.ui.CategoryCard
 import com.bellminp.core.ui.categoryCardList
-import java.util.Locale.Category
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.ItemPosition
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 
 @Composable
 fun CategoryRoute(
@@ -49,14 +64,20 @@ fun CategoryRoute(
     viewModel: CategoryViewModel = hiltViewModel(),
 ) {
 
+    val context = LocalContext.current
     val categoryUiState: CategoryUiState by viewModel.categoryUiState.collectAsStateWithLifecycle()
 
     CategoryScreen(
         modifier = modifier,
         categoryUiState = categoryUiState,
         onAddClick = {
-            viewModel.insertCategory(it)
-        }
+            viewModel.insertCategory(context.resources.getString(R.string.feature_category))
+        },
+        onDeleteClick = {
+            viewModel.deleteCategory(listOf(it))
+        },
+        onNameChange = viewModel::updateCategory,
+        onMoveCategory = viewModel::moveCategory
     )
 }
 
@@ -64,39 +85,79 @@ fun CategoryRoute(
 fun CategoryScreen(
     modifier: Modifier = Modifier,
     categoryUiState: CategoryUiState,
-    onAddClick: (String) -> Unit
+    onAddClick: () -> Unit,
+    onDeleteClick: (Category) -> Unit,
+    onNameChange: (Category) -> Unit,
+    onMoveCategory: (List<Category>) -> Unit,
 ) {
+
+    val isKeyboardOpen by keyboardAsState()
+    var data by remember { mutableStateOf<List<Category>>(listOf()) }
+    val state = rememberReorderableLazyListState(
+        onMove = { from, to ->
+            data = data.toMutableList().apply {
+                add(to.index, removeAt(from.index))
+            }
+        },
+        canDragOver = { draggedOver, _ ->
+            draggedOver.index <= data.lastIndex
+        },
+        onDragEnd = { _, _ ->
+            onMoveCategory(data)
+        }
+    )
+
+    LaunchedEffect(categoryUiState) {
+        when (categoryUiState) {
+            is CategoryUiState.Success -> {
+                data = categoryUiState.category
+            }
+
+            is CategoryUiState.Loading -> {}
+            is CategoryUiState.Error -> {}
+        }
+    }
+
     Surface(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .imePadding(),
         color = Color.White
     ) {
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            state = state.listState,
+            modifier = Modifier
+                .fillMaxSize()
+                .reorderable(state)
+                .detectReorderAfterLongPress(state)
         ) {
+            categoryCardList(
+                items = data,
+                isKeyboardOpen = isKeyboardOpen,
+                reorderableState = state,
+                onDeleteClick = onDeleteClick,
+                onNameChange = onNameChange
+            )
 
             item {
-                Column {
-                    AddCategoryComponent(onAddClick = onAddClick)
-                    Spacer(modifier = Modifier.height(40.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    AddCategoryComponent(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .padding(horizontal = 20.dp),
+                        onAddClick = onAddClick
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
-
-            when (categoryUiState) {
-                is CategoryUiState.Success -> {
-                    categoryCardList(categoryUiState.category)
-                }
-
-                is CategoryUiState.Loading -> {
-
-                }
-
-                is CategoryUiState.Error -> {
-
-                }
-            }
-
         }
     }
 }
@@ -104,73 +165,10 @@ fun CategoryScreen(
 @Composable
 fun AddCategoryComponent(
     modifier: Modifier = Modifier,
-    onAddClick: (String) -> Unit
+    onAddClick: () -> Unit,
 ) {
-
-    val isKeyboardOpen by keyboardAsState()
-    val focusManager = LocalFocusManager.current
-
-    var categoryText by remember {
-        mutableStateOf("")
-    }
-
-    LaunchedEffect(key1 = isKeyboardOpen) {
-        if (isKeyboardOpen.not()) focusManager.clearFocus(true)
-    }
-
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .padding(horizontal = 20.dp)
-            .background(
-                shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.primaryContainer
-            )
-    ) {
-        BasicTextField(
-            value = categoryText,
-            onValueChange = {
-                categoryText = it
-            },
-            modifier = Modifier
-                .weight(1f)
-                .padding(10.dp)
-                .align(Alignment.CenterVertically),
-            textStyle = TextStyle(
-                color = Color.Black,
-                fontSize = 16.dp.textSp,
-                fontWeight = FontWeight.W600,
-                textAlign = TextAlign.Start
-            )
-        )
-
-        Button(
-            onClick = {
-                onAddClick(categoryText)
-                categoryText = ""
-            },
-            modifier = Modifier
-                .width(80.dp)
-                .fillMaxHeight(),
-            shape = RoundedCornerShape(
-                topStart = 0.dp,
-                topEnd = 8.dp,
-                bottomStart = 0.dp,
-                bottomEnd = 8.dp
-            ),
-            colors = ButtonColors(
-                contentColor = Color.Blue,
-                containerColor = Color.Blue,
-                disabledContentColor = Color.LightGray,
-                disabledContainerColor = Color.LightGray
-            ),
-            enabled = categoryText.isNotBlank()
-        ) {
-            Text(
-                text = "추가",
-                style = TextStyle(color = Color.White)
-            )
-        }
-    }
+    AddBtn(
+        modifier = modifier,
+        onClick = onAddClick
+    )
 }

@@ -54,4 +54,8 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.metrics)
     implementation(libs.bundles.compose)
+    implementation(libs.compose.swipebox)
+
+
+    implementation(libs.compose.reorderable)
 }

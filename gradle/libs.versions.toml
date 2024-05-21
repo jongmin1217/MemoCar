@@ -25,6 +25,8 @@ androidxMetrics = "1.0.0-alpha04"
 kotlinxDatetime = "0.4.1"
 androidxHiltNavigationCompose = "1.2.0"
 ksp = "1.9.0-1.0.12"
+compose-swipebox = "1.4.0"
+compose-reorderable = "0.9.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +72,8 @@ androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", v
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-ktx" }
+compose-reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "compose-reorderable" }
+compose-swipebox = { module = "io.github.kevinnzou:compose-swipebox", version.ref = "compose-swipebox" }
 
 [bundles]
 compose = ["compose-ui","compose-ui-tooling","compose-ui-viewbinding","compose-ui-util","compose-runtime-livedata","compose-animation","compose-foundation","compose-material","compose-material3","compose-runtime","compose-navigation"]

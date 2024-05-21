@@ -19,4 +19,5 @@ class CategoryRepositoryImpl @Inject constructor(
 
     override suspend fun upsertCategory(categoryList : List<Category>) = categoryDao.upsertCategory(categoryList.map(Category::asEntity))
     override suspend fun insertCategory(category: Category) = categoryDao.insertCategory(category.asEntity())
+    override suspend fun updateCategory(category: Category) = categoryDao.updateCategory(category.asEntity())
 }

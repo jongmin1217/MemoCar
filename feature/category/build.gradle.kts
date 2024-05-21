@@ -60,4 +60,7 @@ dependencies {
     kapt(libs.dagger.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
+
+
+    implementation(libs.compose.reorderable)
 }

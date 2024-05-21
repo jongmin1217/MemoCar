@@ -1,5 +1,6 @@
 package com.bellminp.feature.category
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bellminp.core.common.result.asResult
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import com.bellminp.core.common.result.Result
 import kotlinx.coroutines.launch
+import org.burnoutcrew.reorderable.ItemPosition
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +34,20 @@ class CategoryViewModel @Inject constructor(
 
     fun insertCategory(categoryText : String) = viewModelScope.launch {
         categoryUseCase.insertCategory(categoryText)
+    }
+
+    fun deleteCategory(categoryList : List<Category>) = viewModelScope.launch{
+        categoryList.map { it.id }.apply {
+            categoryUseCase.deleteCategory(this)
+        }
+    }
+
+    fun updateCategory(category: Category) = viewModelScope.launch {
+        categoryUseCase.updateCategory(category)
+    }
+
+    fun moveCategory(categoryList : List<Category>) = viewModelScope.launch {
+        categoryUseCase.upsertCategory(categoryList)
     }
 }
 

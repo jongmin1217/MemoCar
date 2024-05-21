@@ -1,5 +1,6 @@
 package com.bellminp.core.domain
 
+import android.util.Log
 import com.bellminp.core.data.model.asEntity
 import com.bellminp.core.data.repository.CategoryRepository
 import com.bellminp.core.database.model.CategoryEntity
@@ -17,16 +18,20 @@ class CategoryUseCase @Inject constructor(
 
     suspend fun deleteCategory(ids: List<Long>) = categoryRepository.deleteCategory(ids)
 
-    suspend fun upsertCategory(categoryList : List<Category>) = categoryRepository.upsertCategory(categoryList)
+    suspend fun upsertCategory(categoryList : List<Category>){
+        categoryRepository.upsertCategory(categoryList.mapIndexed { index, category -> category.copy(displayOrder = index)})
+    }
 
     suspend fun insertCategory(categoryText : String){
-        val listSize = getCategoryList().first().size
+        val maxOrder = getCategoryList().first().maxOfOrNull { it.displayOrder }
         categoryRepository.insertCategory(
             Category(
                 id = 0,
                 name = categoryText,
-                displayOrder = listSize
+                displayOrder = maxOrder?.plus(1)?:0
             )
         )
     }
+
+    suspend fun updateCategory(category : Category) = categoryRepository.updateCategory(category)
 }

@@ -73,50 +73,6 @@ fun NavigationBar(
 }
 
 
-@Composable
-fun NavigationRail(
-    modifier: Modifier = Modifier,
-    header: @Composable (ColumnScope.() -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    NavigationRail(
-        modifier = modifier,
-        containerColor = Color.Transparent,
-        contentColor = NavigationDefaults.navigationContentColor(),
-        header = header,
-        content = content,
-    )
-}
-@Composable
-fun NavigationRailItem(
-    selected: Boolean,
-    onClick: () -> Unit,
-    icon: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    selectedIcon: @Composable () -> Unit = icon,
-    enabled: Boolean = true,
-    label: @Composable (() -> Unit)? = null,
-    alwaysShowLabel: Boolean = true,
-) {
-    NavigationRailItem(
-        selected = selected,
-        onClick = onClick,
-        icon = if (selected) selectedIcon else icon,
-        modifier = modifier,
-        enabled = enabled,
-        label = label,
-        alwaysShowLabel = alwaysShowLabel,
-        colors = NavigationRailItemDefaults.colors(
-            selectedIconColor = NavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = NavigationDefaults.navigationContentColor(),
-            selectedTextColor = NavigationDefaults.navigationSelectedItemColor(),
-            unselectedTextColor = NavigationDefaults.navigationContentColor(),
-            indicatorColor = NavigationDefaults.navigationIndicatorColor(),
-        ),
-    )
-}
-
-
 object NavigationDefaults {
     @Composable
     fun navigationContentColor() = MaterialTheme.colorScheme.onSurfaceVariant
