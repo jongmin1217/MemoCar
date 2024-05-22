@@ -16,18 +16,18 @@ class CategoryUseCase @Inject constructor(
 ) {
     fun getCategoryList(): Flow<List<Category>> = categoryRepository.getCategoryList()
 
-    suspend fun deleteCategory(ids: List<Long>) = categoryRepository.deleteCategory(ids)
+    suspend fun deleteCategory(id : Long) = categoryRepository.deleteCategory(id)
 
     suspend fun upsertCategory(categoryList : List<Category>){
         categoryRepository.upsertCategory(categoryList.mapIndexed { index, category -> category.copy(displayOrder = index)})
     }
 
-    suspend fun insertCategory(categoryText : String){
+    suspend fun insertCategory(){
         val maxOrder = getCategoryList().first().maxOfOrNull { it.displayOrder }
         categoryRepository.insertCategory(
             Category(
                 id = 0,
-                name = categoryText,
+                name = "카테고리",
                 displayOrder = maxOrder?.plus(1)?:0
             )
         )

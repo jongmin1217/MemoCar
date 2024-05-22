@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.metrics)
     implementation(libs.bundles.compose)
     implementation(libs.compose.swipebox)
-
+    implementation(libs.coil)
 
     implementation(libs.compose.reorderable)
 }

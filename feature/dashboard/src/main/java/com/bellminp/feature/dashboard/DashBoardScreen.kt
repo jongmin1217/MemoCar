@@ -1,40 +1,30 @@
 package com.bellminp.feature.dashboard
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ScrollableTabRow
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.Text
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bellminp.core.designsystem.utils.textSp
 import com.bellminp.core.model.data.Category
 
@@ -44,26 +34,26 @@ fun DashBoardRoute(
     viewModel: DashBoardViewModel = hiltViewModel()
 ) {
 
-    val categoryUiState: CategoryUiState by viewModel.categoryUiState.collectAsStateWithLifecycle()
+    val categoryUiState: DashBoardContract.CategoryUiState = viewModel.viewState.value
 
     DashBoardScreen(
         modifier = modifier,
-        categoryUiState = categoryUiState
+        categoryUiState = categoryUiState,
+        onSelectedId = {
+            viewModel.setEvent(DashBoardContract.Event.OnSelectedId(it))
+        }
     )
 }
 
 @Composable
 fun DashBoardScreen(
     modifier: Modifier = Modifier,
-    categoryUiState: CategoryUiState
+    categoryUiState: DashBoardContract.CategoryUiState,
+    onSelectedId : (Long?) -> Unit
 ) {
 
     var tabId by rememberSaveable {
         mutableStateOf<Long?>(null)
-    }
-
-    LaunchedEffect(tabId) {
-        Log.d("qweqwe", tabId.toString())
     }
 
     fun List<Category>.findIndex(id: Long?) = indexOfFirst { category ->
@@ -86,7 +76,7 @@ fun DashBoardScreen(
             Modifier.fillMaxSize()
         ) {
             when (categoryUiState) {
-                is CategoryUiState.Success -> {
+                is DashBoardContract.CategoryUiState.Success -> {
                     if (categoryUiState.category.isNotEmpty()) {
                         CategoryTab(
                             tabIndex = categoryUiState.category.findIndex(tabId),
@@ -98,8 +88,8 @@ fun DashBoardScreen(
                     }
                 }
 
-                is CategoryUiState.Loading -> {}
-                is CategoryUiState.Error -> {}
+                is DashBoardContract.CategoryUiState.Loading -> {}
+                is DashBoardContract.CategoryUiState.Error -> {}
             }
         }
 
@@ -126,7 +116,8 @@ fun CategoryTab(
                     .background(MaterialTheme.colorScheme.primaryContainer)
             )
         },
-        backgroundColor = Color.White,
+        contentColor = Color.White,
+        containerColor = Color.White,
         divider = {},
         modifier = modifier.fillMaxWidth()
     ) {

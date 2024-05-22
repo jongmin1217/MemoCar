@@ -9,7 +9,7 @@ import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.ReorderableLazyListState
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 
-@OptIn(ExperimentalFoundationApi::class)
+
 fun LazyListScope.categoryCardList(
     items : List<Category>,
     isKeyboardOpen : Boolean,

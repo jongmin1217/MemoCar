@@ -1,27 +1,21 @@
 package com.bellminp.core.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults.cardColors
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,48 +25,52 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.bellminp.core.designsystem.component.SwipeContent
 import com.bellminp.core.designsystem.component.SwipeContentType
 import com.bellminp.core.designsystem.utils.textSp
+import com.bellminp.core.model.data.Brand
 import com.bellminp.core.model.data.Category
 import com.kevinnzou.compose.swipebox.AnchoredDragBox
 import com.kevinnzou.compose.swipebox.DragAnchors
 import com.kevinnzou.compose.swipebox.SwipeDirection
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CategoryCard(
-    category: Category,
+fun BrandCard(
+    brand: Brand,
     isKeyboardOpen : Boolean,
-    isDragging : Boolean,
     modifier: Modifier = Modifier,
-    onDeleteClick: (Category) -> Unit,
-    onNameChange : (Category) -> Unit
-) {
+    onDeleteClick: (Brand) -> Unit,
+    onNameChange : (Brand) -> Unit
+){
     val scope = rememberCoroutineScope()
     val focusRequester = FocusRequester()
     val focusManager = LocalFocusManager.current
 
-    var categoryText by remember {
+    var brandText by remember {
         mutableStateOf(
             TextFieldValue(
-                text = category.name,
-                selection = TextRange(category.name.length)
+                text = brand.name,
+                selection = TextRange(brand.name.length)
             )
         )
     }
@@ -94,7 +92,6 @@ fun CategoryCard(
 
     Card(
         modifier = modifier
-            .scale(if(isDragging) 1.1f else 1f)
             .fillMaxWidth()
             .height(80.dp)
             .padding(
@@ -102,12 +99,12 @@ fun CategoryCard(
                 vertical = 10.dp
             )
             .shadow(
-                elevation = if(isDragging) 16.dp else 3.dp,
+                elevation = 3.dp,
                 shape = RoundedCornerShape(8.dp),
                 spotColor = Color(0x4A000000)
             ),
         shape = RoundedCornerShape(8.dp),
-        colors = cardColors(
+        colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
     ) {
@@ -131,7 +128,7 @@ fun CategoryCard(
                                         focusRequester.requestFocus()
                                     }
                                 }else{
-                                    onDeleteClick(category)
+                                    onDeleteClick(brand)
                                 }
                             }
                         )
@@ -139,14 +136,28 @@ fun CategoryCard(
                 }
             }
         ){_, _, _ ->
-            Box(
+            Row(
                 modifier = Modifier.fillMaxSize()
             ) {
+                Spacer(modifier = Modifier.width(5.dp))
+
+                AsyncImage(
+                    model = brand.imageUrl,
+                    contentDescription = "brandImage",
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .align(Alignment.CenterVertically),
+                    placeholder = painterResource(id = R.drawable.img_camera),
+                    fallback = painterResource(id = R.drawable.img_camera),
+                    error = painterResource(id = R.drawable.img_camera)
+                )
+
                 BasicTextField(
-                    value = categoryText,
+                    value = brandText,
                     onValueChange = {
                         if(it.text.length <= 10) {
-                            categoryText = it
+                            brandText = it
                         }
                     },
                     textStyle = TextStyle(
@@ -155,11 +166,11 @@ fun CategoryCard(
                         color = Color.Black
                     ),
                     modifier = Modifier
-                        .align(Alignment.CenterStart)
+                        .align(Alignment.CenterVertically)
                         .padding(start = 20.dp)
                         .focusRequester(focusRequester)
                         .onFocusChanged {
-                            if(isFocus && it.hasFocus.not()) onNameChange(category.copy(name = categoryText.text))
+                            if (isFocus && it.hasFocus.not()) onNameChange(brand.copy(name = brandText.text))
                             isFocus = it.hasFocus
                         },
                     enabled = isEnableEdit,

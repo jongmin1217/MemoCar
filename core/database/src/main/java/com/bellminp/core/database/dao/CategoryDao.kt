@@ -24,6 +24,6 @@ interface CategoryDao {
     @Update
     suspend fun updateCategory(categoryEntity: CategoryEntity)
 
-    @Query(value = "DELETE FROM category WHERE id in (:ids)")
-    suspend fun deleteCategory(ids: List<Long>)
+    @Query(value = "DELETE FROM category WHERE id in (:id)")
+    suspend fun deleteCategory(id: Long)
 }

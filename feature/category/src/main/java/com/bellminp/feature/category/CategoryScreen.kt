@@ -39,27 +39,30 @@ fun CategoryRoute(
     viewModel: CategoryViewModel = hiltViewModel(),
 ) {
 
-    val context = LocalContext.current
-    val categoryUiState: CategoryUiState by viewModel.categoryUiState.collectAsStateWithLifecycle()
+    val categoryUiState: CategoryContract.CategoryUiState = viewModel.viewState.value
 
     CategoryScreen(
         modifier = modifier,
         categoryUiState = categoryUiState,
         onAddClick = {
-            viewModel.insertCategory(context.resources.getString(R.string.feature_category))
+            viewModel.setEvent(CategoryContract.Event.OnInsertCategory)
         },
         onDeleteClick = {
-            viewModel.deleteCategory(listOf(it))
+            viewModel.setEvent(CategoryContract.Event.OnDeleteCategory(it))
         },
-        onNameChange = viewModel::updateCategory,
-        onMoveCategory = viewModel::moveCategory
+        onNameChange = {
+            viewModel.setEvent(CategoryContract.Event.OnUpdateCategory(it))
+        },
+        onMoveCategory = {
+            viewModel.setEvent(CategoryContract.Event.OnMoveCategory(it))
+        }
     )
 }
 
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
-    categoryUiState: CategoryUiState,
+    categoryUiState: CategoryContract.CategoryUiState,
     onAddClick: () -> Unit,
     onDeleteClick: (Category) -> Unit,
     onNameChange: (Category) -> Unit,
@@ -87,12 +90,12 @@ fun CategoryScreen(
 
     LaunchedEffect(categoryUiState) {
         when (categoryUiState) {
-            is CategoryUiState.Success -> {
+            is CategoryContract.CategoryUiState.Success -> {
                 data = categoryUiState.category
             }
 
-            is CategoryUiState.Loading -> {}
-            is CategoryUiState.Error -> {}
+            is CategoryContract.CategoryUiState.Loading -> {}
+            is CategoryContract.CategoryUiState.Error -> {}
         }
     }
 
@@ -125,12 +128,12 @@ fun CategoryScreen(
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    AddCategoryComponent(
+                    AddBtn(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(60.dp)
                             .padding(horizontal = 20.dp),
-                        onAddClick = onAddClick
+                        onClick = onAddClick
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -140,13 +143,3 @@ fun CategoryScreen(
     }
 }
 
-@Composable
-fun AddCategoryComponent(
-    modifier: Modifier = Modifier,
-    onAddClick: () -> Unit,
-) {
-    AddBtn(
-        modifier = modifier,
-        onClick = onAddClick
-    )
-}

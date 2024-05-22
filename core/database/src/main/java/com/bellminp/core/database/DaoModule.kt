@@ -1,5 +1,6 @@
 package com.bellminp.core.database
 
+import com.bellminp.core.database.dao.BrandDao
 import com.bellminp.core.database.dao.CategoryDao
 import dagger.Module
 import dagger.Provides
@@ -14,4 +15,9 @@ object DaoModule {
     fun providesCategoryDao(
         database: MemoCarDatabase
     ) : CategoryDao = database.categoryDao()
+
+    @Provides
+    fun providesBrandDao(
+        database: MemoCarDatabase
+    ) : BrandDao = database.brandDao()
 }

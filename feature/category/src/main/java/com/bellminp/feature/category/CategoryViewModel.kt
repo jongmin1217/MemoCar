@@ -1,85 +1,73 @@
 package com.bellminp.feature.category
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bellminp.core.common.base.BaseViewModel
+import com.bellminp.core.common.result.Result
 import com.bellminp.core.common.result.asResult
 import com.bellminp.core.domain.CategoryUseCase
 import com.bellminp.core.model.data.Category
-import com.bellminp.core.model.data.FollowableCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import com.bellminp.core.common.result.Result
 import kotlinx.coroutines.launch
-import org.burnoutcrew.reorderable.ItemPosition
 import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val categoryUseCase: CategoryUseCase,
-) : ViewModel() {
+) : BaseViewModel<CategoryContract.Event, CategoryContract.CategoryUiState, CategoryContract.Effect>() {
 
-    val categoryUiState: StateFlow<CategoryUiState> = categoryUiState(
-        categoryUseCase = categoryUseCase
-    ).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = CategoryUiState.Loading,
-    )
 
-    fun insertCategory(categoryText : String) = viewModelScope.launch {
-        categoryUseCase.insertCategory(categoryText)
-    }
+    override fun setInitialState() = CategoryContract.CategoryUiState.Loading
 
-    fun deleteCategory(categoryList : List<Category>) = viewModelScope.launch{
-        categoryList.map { it.id }.apply {
-            categoryUseCase.deleteCategory(this)
+    override fun handleEvents(event: CategoryContract.Event) {
+        when (event) {
+            is CategoryContract.Event.OnInsertCategory -> insertCategory()
+            is CategoryContract.Event.OnDeleteCategory -> deleteCategory(event.category)
+            is CategoryContract.Event.OnMoveCategory -> moveCategory(event.categoryList)
+            is CategoryContract.Event.OnUpdateCategory -> updateCategory(event.category)
         }
     }
 
-    fun updateCategory(category: Category) = viewModelScope.launch {
+    init {
+        getCategoryList()
+    }
+
+    private fun getCategoryList() = viewModelScope.launch {
+        categoryUseCase.getCategoryList().asResult().collect {
+            setState {
+                when (it) {
+                    is Result.Success -> {
+                        CategoryContract.CategoryUiState.Success(
+                            category = it.data
+                        )
+                    }
+
+                    is Result.Loading -> {
+                        CategoryContract.CategoryUiState.Loading
+                    }
+
+                    is Result.Error -> {
+                        CategoryContract.CategoryUiState.Error
+                    }
+                }
+            }
+        }
+    }
+
+    private fun insertCategory() = viewModelScope.launch {
+        categoryUseCase.insertCategory()
+    }
+
+    private fun deleteCategory(category : Category) = viewModelScope.launch {
+        categoryUseCase.deleteCategory(category.id)
+    }
+
+    private fun updateCategory(category: Category) = viewModelScope.launch {
         categoryUseCase.updateCategory(category)
     }
 
-    fun moveCategory(categoryList : List<Category>) = viewModelScope.launch {
+    private fun moveCategory(categoryList: List<Category>) = viewModelScope.launch {
         categoryUseCase.upsertCategory(categoryList)
     }
-}
 
 
-private fun categoryUiState(
-    categoryUseCase: CategoryUseCase,
-): Flow<CategoryUiState> {
-
-    val categoryStream: Flow<List<Category>> = categoryUseCase.getCategoryList()
-
-    return categoryStream.asResult().map { followedCategoryToCategoryResult ->
-        when (followedCategoryToCategoryResult) {
-            is Result.Success -> {
-                CategoryUiState.Success(
-                    category = followedCategoryToCategoryResult.data
-                )
-            }
-
-            is Result.Loading -> {
-                CategoryUiState.Loading
-            }
-
-            is Result.Error -> {
-                CategoryUiState.Error
-            }
-        }
-    }
-}
-
-
-sealed interface CategoryUiState {
-    data class Success(val category: List<Category>) : CategoryUiState
-    data object Error : CategoryUiState
-    data object Loading : CategoryUiState
 }

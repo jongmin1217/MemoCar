@@ -1,5 +1,7 @@
 package com.bellminp.core.data.di
 
+import com.bellminp.core.data.repository.BrandRepository
+import com.bellminp.core.data.repository.BrandRepositoryImpl
 import com.bellminp.core.data.repository.CategoryRepository
 import com.bellminp.core.data.repository.CategoryRepositoryImpl
 import com.bellminp.core.data.repository.DashboardRepository
@@ -21,4 +23,9 @@ interface DataModule {
     fun bindsDashBoardRepository(
         dashBoardRepository: DashboardRepositoryImpl,
     ): DashboardRepository
+
+    @Binds
+    fun bindsBrandRepository(
+        brandRepository : BrandRepositoryImpl,
+    ): BrandRepository
 }

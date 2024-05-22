@@ -1,7 +1,9 @@
 package com.bellminp.feature.dashboard
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bellminp.core.common.base.BaseViewModel
 import com.bellminp.core.common.result.Result
 import com.bellminp.core.common.result.asResult
 import com.bellminp.core.domain.CategoryUseCase
@@ -13,52 +15,47 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DashBoardViewModel @Inject constructor(
     private val dashBoardUseCase: DashBoardUseCase
-) : ViewModel() {
+) : BaseViewModel<DashBoardContract.Event, DashBoardContract.CategoryUiState, DashBoardContract.Effect>() {
 
-    val categoryUiState: StateFlow<CategoryUiState> = categoryUiState(
-        dashBoardUseCase = dashBoardUseCase
-    ).stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = CategoryUiState.Loading,
-    )
+    override fun setInitialState() = DashBoardContract.CategoryUiState.Loading
 
-}
-
-
-private fun categoryUiState(
-    dashBoardUseCase: DashBoardUseCase,
-): Flow<CategoryUiState> {
-
-    val categoryStream: Flow<List<Category>> = dashBoardUseCase.getCategoryList()
-
-    return categoryStream.asResult().map { followedCategoryToCategoryResult ->
-        when (followedCategoryToCategoryResult) {
-            is Result.Success -> {
-                CategoryUiState.Success(
-                    category = followedCategoryToCategoryResult.data
-                )
-            }
-
-            is Result.Loading -> {
-                CategoryUiState.Loading
-            }
-
-            is Result.Error -> {
-                CategoryUiState.Error
+    override fun handleEvents(event: DashBoardContract.Event) {
+        when(event){
+            is DashBoardContract.Event.OnSelectedId -> {
+                Log.d("qweqwe",event.id.toString())
             }
         }
     }
-}
 
+    init {
+        getCategoryList()
+    }
 
-sealed interface CategoryUiState {
-    data class Success(val category: List<Category>) : CategoryUiState
-    data object Error : CategoryUiState
-    data object Loading : CategoryUiState
+    private fun getCategoryList() = viewModelScope.launch {
+        dashBoardUseCase.getCategoryList().asResult().collect {
+            setState {
+                when (it) {
+                    is Result.Success -> {
+                        DashBoardContract.CategoryUiState.Success(
+                            category = it.data
+                        )
+                    }
+
+                    is Result.Loading -> {
+                        DashBoardContract.CategoryUiState.Loading
+                    }
+
+                    is Result.Error -> {
+                        DashBoardContract.CategoryUiState.Error
+                    }
+                }
+            }
+        }
+    }
 }
