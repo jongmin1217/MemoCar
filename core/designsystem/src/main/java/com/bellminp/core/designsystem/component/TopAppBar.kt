@@ -28,10 +28,8 @@ fun HeaderScreen(
     @StringRes titleRes: Int,
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
-    actionIcon: ImageVector? = null,
-    actionIconContentDescription: String? = null,
-    onNavigationClick: () -> Unit = {},
-    onActionClick: () -> Unit = {}
+    actionContent: @Composable (() -> Unit)? = null,
+    onNavigationClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -56,15 +54,7 @@ fun HeaderScreen(
             }
         },
         actions = {
-            actionIcon?.let {
-                IconButton(onClick = onActionClick) {
-                    Icon(
-                        imageVector = it,
-                        contentDescription = actionIconContentDescription,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-            }
+            actionContent?.invoke()
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White),
         modifier = modifier

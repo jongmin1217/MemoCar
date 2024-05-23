@@ -23,7 +23,7 @@ class CategoryViewModel @Inject constructor(
             is CategoryContract.Event.OnInsertCategory -> insertCategory()
             is CategoryContract.Event.OnDeleteCategory -> deleteCategory(event.category)
             is CategoryContract.Event.OnMoveCategory -> moveCategory(event.categoryList)
-            is CategoryContract.Event.OnUpdateCategory -> updateCategory(event.category)
+            is CategoryContract.Event.OnUpdateNameCategory -> updateCategory(event.category, event.changedName)
         }
     }
 
@@ -61,8 +61,8 @@ class CategoryViewModel @Inject constructor(
         categoryUseCase.deleteCategory(category.id)
     }
 
-    private fun updateCategory(category: Category) = viewModelScope.launch {
-        categoryUseCase.updateCategory(category)
+    private fun updateCategory(category: Category, changedName : String) = viewModelScope.launch {
+        categoryUseCase.updateCategory(category.copy(name = changedName))
     }
 
     private fun moveCategory(categoryList: List<Category>) = viewModelScope.launch {

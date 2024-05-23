@@ -5,28 +5,29 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Modifier
 import com.bellminp.core.model.data.Category
+import com.bellminp.core.model.data.SwipeItem
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.ReorderableLazyListState
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 
 
 fun LazyListScope.categoryCardList(
-    items : List<Category>,
+    items : List<SwipeItem>,
     isKeyboardOpen : Boolean,
     reorderableState : ReorderableLazyListState,
     itemModifier: Modifier = Modifier,
-    onDeleteClick : (Category) -> Unit,
-    onNameChange : (Category) -> Unit
+    onDeleteClick : (SwipeItem) -> Unit,
+    onNameChange : (SwipeItem, String) -> Unit
 ) = items(
     items = items,
-    key = {it.id},
-    itemContent = {item: Category ->
+    key = {it.getItemId()},
+    itemContent = {item: SwipeItem ->
         ReorderableItem(
             state = reorderableState,
-            key = item.id
+            key = item.getItemId()
         ) { isDragging ->
-            CategoryCard(
-                category = item,
+            SwipeCard(
+                item = item,
                 isKeyboardOpen = isKeyboardOpen,
                 isDragging = isDragging,
                 modifier = itemModifier,

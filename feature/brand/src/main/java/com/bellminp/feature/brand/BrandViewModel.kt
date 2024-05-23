@@ -21,7 +21,8 @@ class BrandViewModel @Inject constructor(
         when (event) {
             is BrandContract.Event.OnInsertBrand -> insertBrand()
             is BrandContract.Event.OnDeleteBrand -> deleteBrand(event.brand)
-            is BrandContract.Event.OnUpdateBrand -> updateBrand(event.brand)
+            is BrandContract.Event.OnUpdateNameBrand -> updateBrand(event.brand, event.changedName)
+            is BrandContract.Event.OnUpdateImageBrand -> {}
         }
     }
     
@@ -59,7 +60,7 @@ class BrandViewModel @Inject constructor(
         brandUseCase.deleteBrand(brand.id)
     }
 
-    private fun updateBrand(brand: Brand) = viewModelScope.launch {
-        brandUseCase.updateBrand(brand)
+    private fun updateBrand(brand: Brand, changedName : String) = viewModelScope.launch {
+        brandUseCase.updateBrand(brand.copy(name = changedName))
     }
 }

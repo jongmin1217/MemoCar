@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -19,9 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -61,38 +65,9 @@ import com.bellminp.memocar.ui.theme.Purple40
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MemoCarApp(
-    appState: MemoAppState = rememberMemoCarState()
+    appState: MemoAppState = rememberMemoCarState(),
 ) {
 
-    val scope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
-//
-//    val bottomSheetState = rememberModalBottomSheetState(
-//        initialValue = ModalBottomSheetValue.Hidden
-//    )
-//
-//    var bottomSheetContent by remember {
-//        mutableStateOf<@Composable (()->Unit)>({ Text(text = "null") })
-//    }
-//
-//    LaunchedEffect(key1 = bottomSheetState.isVisible) {
-//        if(bottomSheetState.isVisible.not()){
-//            focusManager.clearFocus()
-//        }
-//    }
-//
-//    ModalBottomSheetLayout(
-//        sheetState = bottomSheetState,
-//        sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-//        sheetBackgroundColor = Color.White,
-//        sheetContent = {
-//            bottomSheetContent()
-//        },
-//        modifier = Modifier.imePadding()
-//    ) {
-//
-//    }
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -100,18 +75,16 @@ fun MemoCarApp(
         containerColor = Color.White,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            if(appState.currentDestination.isShowNavigationBar()){
-                BottomBar(
-                    destinations = appState.topDestinations,
-                    onNavigateToDestination = appState::navigateToTopDestination,
-                    currentDestination = appState.currentDestination,
-                    modifier = Modifier.testTag("BottomBar")
-                )
-            }
+            BottomBar(
+                destinations = appState.topDestinations,
+                onNavigateToDestination = appState::navigateToTopDestination,
+                currentDestination = appState.currentDestination,
+                modifier = Modifier.testTag("BottomBar")
+            )
         }
     ) {
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
@@ -122,20 +95,44 @@ fun MemoCarApp(
                     ),
                 )
         ) {
-            val destination = appState.currentTopLevelDestination
-            destination?.let { topDestination ->
-                HeaderScreen(
-                    titleRes = topDestination.titleTextId,
-                    actionIcon = if(topDestination.isShowActionBtn) Icons.Rounded.Add else null,
-                    actionIconContentDescription = if(topDestination.isShowActionBtn) stringResource(id = R.string.add) else null,
-                    onActionClick = { appState.navigateToCar() }
-                )
-            }
 
             MemoCarNavHost(
                 memoAppState = appState,
                 modifier = Modifier.fillMaxSize()
             )
+
+            val destination = appState.currentTopLevelDestination
+            destination?.let { topDestination ->
+                HeaderScreen(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter),
+                    titleRes = topDestination.titleTextId,
+                    actionContent = {
+                        if (topDestination.isShowActionBtn) {
+                            Row {
+                                IconButton(
+                                    onClick = { appState.navigateToSetting() }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Settings,
+                                        contentDescription = "setting",
+                                        tint = MaterialTheme.colorScheme.onSurface,
+                                    )
+                                }
+                                IconButton(
+                                    onClick = { appState.navigateToCar() }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Add,
+                                        contentDescription = "add",
+                                        tint = MaterialTheme.colorScheme.onSurface,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                )
+            }
         }
     }
 }
@@ -174,124 +171,9 @@ private fun BottomBar(
     }
 }
 
-@Composable
-fun AddBottomSheet(
-    onItemClick: (AddType) -> Unit
-) {
-    BaseBottomSheetContent {
-        val addTypeList = listOf(AddType.CAR,AddType.BRAND,AddType.CATEGORY)
-        repeat(3) {
-            AddTypeComponent(
-                addType = addTypeList[it],
-                onClick = onItemClick
-            )
-        }
-    }
-}
-
-@Composable
-fun AddCategoryComponent(){
-    BaseBottomSheetContent {
-        var categoryText by remember {
-            mutableStateOf("")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        TextField(
-            value = categoryText,
-            onValueChange = {
-                categoryText = it
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            colors = colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
-            )
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Button(
-            onClick = {
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .padding(horizontal = 20.dp),
-            colors = ButtonColors(
-                containerColor = Purple40,
-                contentColor = Purple40,
-                disabledContainerColor = Color.Gray,
-                disabledContentColor = Color.Gray
-            ),
-            shape = RoundedCornerShape(8.dp),
-            enabled = categoryText.isNotBlank()
-        ) {
-            Text(
-                text = stringResource(
-                    id = R.string.save
-                ),
-                style = TextStyle(
-                    color = Color.White
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-}
-
-@Composable
-fun AddTypeComponent(
-    addType: AddType,
-    onClick: (AddType) -> Unit
-) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(60.dp)
-        .clickable { onClick.invoke(addType) }
-    ) {
-        Text(
-            text = stringResource(id = addType.resourceId),
-            style = TextStyle(
-                fontSize = 18.dp.textSp,
-                color = Color.Black,
-                fontWeight = FontWeight.W500
-            ),
-            modifier = Modifier
-                .align(Alignment.Center)
-        )
-    }
-
-}
-
-
-private fun NavDestination?.isShowNavigationBar() =
-    when (this?.route) {
-        DASHBOARD_ROUTE -> TopDestination.DASHBOARD
-        CATEGORY_ROUTE -> TopDestination.CATEGORY
-        BRAND_ROUTE -> TopDestination.BRAND
-        else -> null
-    }.let {
-        it == TopDestination.DASHBOARD || it == TopDestination.CATEGORY || it == TopDestination.BRAND
-    }
-
 
 
 private fun NavDestination?.isTopDestinationInHierarchy(destination: TopDestination) =
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false
-
-
-enum class AddType(
-    val resourceId: Int
-) {
-    CATEGORY(R.string.add_category),
-    BRAND(R.string.add_brand),
-    CAR(R.string.add_car)
-}

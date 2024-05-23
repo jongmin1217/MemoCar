@@ -23,5 +23,6 @@ data class CarEntity(
     val transmissionTypeId : Int,
     val designTypeId : Int,
     val price : Int,
-    val resellPrice :Int?
+    val resellPrice :Int?,
+    val imageUrl : String?
 )

@@ -27,6 +27,8 @@ androidxHiltNavigationCompose = "1.2.0"
 ksp = "1.9.0-1.0.12"
 compose-swipebox = "1.4.0"
 compose-reorderable = "0.9.6"
+compose-shimmer = "1.0.4"
+compose-colorpicker = "1.0.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -74,6 +76,8 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-ktx" }
 compose-reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "compose-reorderable" }
 compose-swipebox = { module = "io.github.kevinnzou:compose-swipebox", version.ref = "compose-swipebox" }
+compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "compose-shimmer" }
+compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "compose-colorpicker" }
 
 [bundles]
 compose = ["compose-ui","compose-ui-tooling","compose-ui-viewbinding","compose-ui-util","compose-runtime-livedata","compose-animation","compose-foundation","compose-material","compose-material3","compose-runtime","compose-navigation"]

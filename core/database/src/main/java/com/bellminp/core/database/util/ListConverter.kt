@@ -1,7 +1,6 @@
 package com.bellminp.core.database.util
 
 import androidx.room.TypeConverter
-import kotlinx.datetime.Instant
 
 class ListConverter {
     @TypeConverter

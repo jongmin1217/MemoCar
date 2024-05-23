@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="feature_car">Car</string>
+    <string name="add_car">차량 등록</string>
+    <string name="model_name">모델명</string>
+    <string name="category">카테고리</string>
+    <string name="brand">브랜드</string>
 </resources>

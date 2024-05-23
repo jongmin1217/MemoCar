@@ -21,6 +21,7 @@ import com.bellminp.feature.category.navigation.navigateToCategory
 import com.bellminp.feature.dashboard.navigation.DASHBOARD_GRAPH_ROUTE_PATTERN
 import com.bellminp.feature.dashboard.navigation.DASHBOARD_ROUTE
 import com.bellminp.feature.dashboard.navigation.navigationToDashboardGraph
+import com.bellminp.feature.setting.navigation.navigateToSetting
 import com.bellminp.memocar.navigation.TopDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -79,9 +80,7 @@ class MemoAppState(
         }
     }
     fun navigateToCar() = navController.navigateToCar()
-    fun navigateToCategory() = navController.navigateToCategory()
-    fun navigateToBrand() = navController.navigateToBrand()
-    fun navigateBackStack() = navController.popBackStack()
+    fun navigateToSetting() = navController.navigateToSetting()
 
 }
 

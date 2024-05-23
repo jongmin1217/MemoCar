@@ -8,7 +8,7 @@ import com.bellminp.core.model.data.Category
 class CategoryContract {
     sealed class Event : ViewEvent {
         data class OnDeleteCategory(val category : Category) : Event()
-        data class OnUpdateCategory(val category: Category) : Event()
+        data class OnUpdateNameCategory(val category: Category, val changedName : String) : Event()
         data class OnMoveCategory(val categoryList : List<Category>) : Event()
         data object OnInsertCategory : Event()
     }

@@ -13,6 +13,7 @@ import com.bellminp.feature.dashboard.navigation.DASHBOARD_ROUTE
 import com.bellminp.feature.dashboard.navigation.dashboardGraph
 import com.bellminp.feature.detail.navigation.detailScreen
 import com.bellminp.feature.detail.navigation.navigateToDetail
+import com.bellminp.feature.setting.navigation.settingScreen
 import com.bellminp.memocar.ui.MemoAppState
 
 @Composable
@@ -33,12 +34,15 @@ fun MemoCarNavHost(
                 detailScreen(
                     onBackClick = navController::popBackStack
                 )
+                settingScreen(
+                    onBackClick = navController::popBackStack
+                )
+                carScreen (
+                    onBackClick = navController::popBackStack
+                )
             }
         )
         brandScreen()
         categoryScreen()
-        carScreen(
-            onBackClick = navController::popBackStack
-        )
     }
 }

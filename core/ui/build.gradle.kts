@@ -58,4 +58,5 @@ dependencies {
     implementation(libs.coil)
 
     implementation(libs.compose.reorderable)
+    implementation(libs.compose.shimmer)
 }

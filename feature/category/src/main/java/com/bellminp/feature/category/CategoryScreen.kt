@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +30,7 @@ import com.bellminp.core.designsystem.component.AddBtn
 import com.bellminp.core.designsystem.utils.keyboardAsState
 import com.bellminp.core.model.data.Category
 import com.bellminp.core.ui.categoryCardList
+import com.bellminp.core.ui.swipeLoadingCardList
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
@@ -50,8 +52,8 @@ fun CategoryRoute(
         onDeleteClick = {
             viewModel.setEvent(CategoryContract.Event.OnDeleteCategory(it))
         },
-        onNameChange = {
-            viewModel.setEvent(CategoryContract.Event.OnUpdateCategory(it))
+        onNameChange = { category, changedName ->
+            viewModel.setEvent(CategoryContract.Event.OnUpdateNameCategory(category, changedName))
         },
         onMoveCategory = {
             viewModel.setEvent(CategoryContract.Event.OnMoveCategory(it))
@@ -65,7 +67,7 @@ fun CategoryScreen(
     categoryUiState: CategoryContract.CategoryUiState,
     onAddClick: () -> Unit,
     onDeleteClick: (Category) -> Unit,
-    onNameChange: (Category) -> Unit,
+    onNameChange: (Category, String) -> Unit,
     onMoveCategory: (List<Category>) -> Unit,
 ) {
 
@@ -99,47 +101,58 @@ fun CategoryScreen(
         }
     }
 
-    Surface(
-        modifier = modifier
-            .fillMaxSize()
-            .imePadding(),
-        color = Color.White
-    ) {
-
-        LazyColumn(
-            state = state.listState,
-            modifier = Modifier
+    Scaffold(
+        contentColor = Color.White,
+        containerColor = Color.White
+    ) { paddingValue ->
+        Surface(
+            modifier = modifier
                 .fillMaxSize()
-                .reorderable(state)
-                .detectReorderAfterLongPress(state)
+                .padding(top = paddingValue.calculateTopPadding() + 64.dp)
+                .imePadding(),
+            color = Color.White
         ) {
-            categoryCardList(
-                items = data,
-                isKeyboardOpen = isKeyboardOpen,
-                reorderableState = state,
-                onDeleteClick = onDeleteClick,
-                onNameChange = onNameChange
-            )
 
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    Spacer(modifier = Modifier.height(10.dp))
+            LazyColumn(
+                state = state.listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .reorderable(state)
+                    .detectReorderAfterLongPress(state)
+            ) {
+                categoryCardList(
+                    items = data,
+                    isKeyboardOpen = isKeyboardOpen,
+                    reorderableState = state,
+                    onDeleteClick = { if(it is Category) onDeleteClick(it) },
+                    onNameChange = { category, changedName ->
+                        if(category is Category) onNameChange(category,changedName)
+                    }
+                )
 
-                    AddBtn(
+                if(categoryUiState is CategoryContract.CategoryUiState.Loading) swipeLoadingCardList()
+
+                item {
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
-                            .padding(horizontal = 20.dp),
-                        onClick = onAddClick
-                    )
+                            .fillMaxSize()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                        AddBtn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(60.dp)
+                                .padding(horizontal = 20.dp),
+                            onClick = onAddClick
+                        )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
                 }
             }
         }
     }
+
 }
 

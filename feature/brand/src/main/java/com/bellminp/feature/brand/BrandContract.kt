@@ -10,7 +10,8 @@ class BrandContract {
 
     sealed class Event : ViewEvent {
         data class OnDeleteBrand(val brand : Brand) : Event()
-        data class OnUpdateBrand(val brand: Brand) : Event()
+        data class OnUpdateNameBrand(val brand: Brand, val changedName : String) : Event()
+        data class OnUpdateImageBrand(val brand: Brand, val imageUrl : String) : Event()
         data object OnInsertBrand : Event()
     }
 

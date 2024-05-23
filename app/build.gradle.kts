@@ -63,6 +63,7 @@ dependencies {
     api(project(":feature:car"))
     api(project(":feature:brand"))
     api(project(":feature:detail"))
+    api(project(":feature:setting"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
