@@ -27,7 +27,7 @@ class CategoryUseCase @Inject constructor(
         categoryRepository.insertCategory(
             Category(
                 id = 0,
-                name = "카테고리",
+                name = "",
                 displayOrder = maxOrder?.plus(1)?:0
             )
         )

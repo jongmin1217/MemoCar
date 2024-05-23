@@ -24,35 +24,30 @@ class SettingViewModel @Inject constructor(
             is SettingContract.Event.OnInsertSetting -> insertSetting(event.carInfoType)
             is SettingContract.Event.OnDeleteSetting -> deleteSetting(event.setting)
             is SettingContract.Event.OnUpdateNameSetting -> updateNameSetting(event.setting, event.changedName)
-            is SettingContract.Event.OnChangeTab -> getSettingList(event.id)
         }
     }
 
-    private var searchJob : Job? = null
 
     init {
-        getSettingList(0)
+        getSettingList()
     }
 
-    private fun getSettingList(id : Long) {
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch{
-            settingUseCase.getSettingList(id).asResult().collect {
-                setState {
-                    when (it) {
-                        is Result.Success -> {
-                            SettingContract.SettingUiState.Success(
-                                setting = it.data
-                            )
-                        }
+    private fun getSettingList() = viewModelScope.launch{
+        settingUseCase.getAllSettingList().asResult().collect {
+            setState {
+                when (it) {
+                    is Result.Success -> {
+                        SettingContract.SettingUiState.Success(
+                            setting = it.data
+                        )
+                    }
 
-                        is Result.Loading -> {
-                            SettingContract.SettingUiState.Loading
-                        }
+                    is Result.Loading -> {
+                        SettingContract.SettingUiState.Loading
+                    }
 
-                        is Result.Error -> {
-                            SettingContract.SettingUiState.Error
-                        }
+                    is Result.Error -> {
+                        SettingContract.SettingUiState.Error
                     }
                 }
             }

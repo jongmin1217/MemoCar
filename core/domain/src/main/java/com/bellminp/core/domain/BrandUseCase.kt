@@ -14,7 +14,7 @@ class BrandUseCase @Inject constructor(
 
     suspend fun deleteBrand(id : Long) = brandRepository.deleteBrand(id)
 
-    suspend fun insertBrand() = brandRepository.insertBrand(Brand(id = 0, name = "브랜드", imageUrl = null))
+    suspend fun insertBrand() = brandRepository.insertBrand(Brand(id = 0, name = "", imageUrl = null))
 
     suspend fun updateBrand(brand : Brand) = brandRepository.updateBrand(brand)
 }

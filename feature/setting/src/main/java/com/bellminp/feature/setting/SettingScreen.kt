@@ -52,8 +52,7 @@ fun SettingRoute(
         onChangeName = { setting, changedName ->
             viewModel.setEvent(SettingContract.Event.OnUpdateNameSetting(setting, changedName))
         },
-        onAddClick = { viewModel.setEvent(SettingContract.Event.OnInsertSetting(it)) },
-        onChangeTab = { viewModel.setEvent(SettingContract.Event.OnChangeTab(it.toLong())) }
+        onAddClick = { viewModel.setEvent(SettingContract.Event.OnInsertSetting(it)) }
     )
 }
 
@@ -64,8 +63,7 @@ fun SettingScreen(
     onBackClick : () -> Unit,
     onDeleteClick : (Setting) -> Unit,
     onChangeName : (Setting, String) -> Unit,
-    onAddClick : (CarInfoType) -> Unit,
-    onChangeTab : (Int) -> Unit
+    onAddClick : (CarInfoType) -> Unit
 ){
 
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -95,7 +93,6 @@ fun SettingScreen(
                 tabItemList = tabItems.map { it.text },
                 onTabIndexChange = {
                     tabIndex = it
-                    onChangeTab(tabIndex)
                 }
             )
 
@@ -107,7 +104,7 @@ fun SettingScreen(
                 when(settingUiState){
                     is SettingContract.SettingUiState.Success -> {
                         swipeCardList(
-                            items = settingUiState.setting,
+                            items = settingUiState.setting.filter { it.type == tabIndex },
                             isKeyboardOpen = isKeyboardOpen,
                             onDeleteClick = { if(it is Setting) onDeleteClick(it) },
                             onNameChange = { brand, changedName ->

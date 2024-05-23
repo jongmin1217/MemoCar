@@ -12,8 +12,6 @@ class SettingContract {
         data class OnDeleteSetting(val setting : Setting) : Event()
         data class OnUpdateNameSetting(val setting: Setting, val changedName : String) : Event()
         data class OnInsertSetting(val carInfoType : CarInfoType) : Event()
-
-        data class OnChangeTab(val id : Long) : Event()
     }
 
     sealed class SettingUiState : ViewState {

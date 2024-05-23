@@ -72,17 +72,12 @@ fun SwipeCard(
         )
     }
 
-    var isEnableEdit by remember {
-        mutableStateOf(false)
-    }
-
     var isFocus by remember {
         mutableStateOf(false)
     }
 
     LaunchedEffect(key1 = isKeyboardOpen) {
         if (isKeyboardOpen.not()) {
-            isEnableEdit = false
             focusManager.clearFocus()
         }
     }
@@ -109,28 +104,18 @@ fun SwipeCard(
         AnchoredDragBox(
             modifier = Modifier.fillMaxSize(),
             swipeDirection = SwipeDirection.EndToStart,
-            endContentWidth = 120.dp,
+            endContentWidth = 60.dp,
             endContent = { anchoredDraggableState, _ ->
                 Row {
-                    repeat(2){ index ->
-                        SwipeContent(
-                            type = if(index == 0) SwipeContentType.EDIT else SwipeContentType.DELETE,
-                            onClick = {
-                                scope.launch {
-                                    anchoredDraggableState.animateTo(DragAnchors.Center)
-                                }
-                                if(it == SwipeContentType.EDIT){
-                                    scope.launch {
-                                        isEnableEdit = true
-                                        delay(100)
-                                        focusRequester.requestFocus()
-                                    }
-                                }else{
-                                    onDeleteClick(item)
-                                }
+                    SwipeContent(
+                        type = SwipeContentType.DELETE,
+                        onClick = {
+                            scope.launch {
+                                anchoredDraggableState.animateTo(DragAnchors.Center)
+                                onDeleteClick(item)
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         ){_, _, _ ->
@@ -174,7 +159,6 @@ fun SwipeCard(
                             if (isFocus && it.hasFocus.not()) onNameChange(item,brandText.text)
                             isFocus = it.hasFocus
                         },
-                    enabled = isEnableEdit,
                     singleLine = true
                 )
             }

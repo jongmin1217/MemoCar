@@ -31,8 +31,10 @@ fun VerticalCheckList(
     title: String,
     selectId: Long?,
     list: List<SwipeItem>,
-    onCLick: (Long) -> Unit,
+    onCLick: (Long?) -> Unit,
 ) {
+
+    if(selectId != null && list.find { it.getItemId() == selectId } == null) onCLick(null)
 
     Column(
         modifier = modifier.padding(horizontal = 15.dp)

@@ -13,7 +13,7 @@ import javax.inject.Inject
 class SettingRepositoryImpl @Inject constructor(
     private val settingDao: SettingDao
 ) : SettingRepository{
-    override fun getSettingList(id : Long) = settingDao.getSettingList(id).map { it.map(SettingEntity::asExternalModel) }
+    override fun getAllSettingList() = settingDao.getAllSettingList().map { it.map(SettingEntity::asExternalModel) }
 
     override suspend fun insertSetting(setting: Setting) = settingDao.insertSetting(setting.asEntity())
 

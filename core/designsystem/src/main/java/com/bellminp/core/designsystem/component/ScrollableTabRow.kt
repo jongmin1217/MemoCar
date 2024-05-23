@@ -35,7 +35,7 @@ fun Tab(
                         currentTabPosition = tabPositions[tabIndex]
                     )
                     .height(2.dp)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(MaterialTheme.colorScheme.primary)
             )
         },
         contentColor = Color.White,
@@ -59,7 +59,7 @@ fun Tab(
                     style = TextStyle(
                         fontSize = 15.dp.textSp,
                         fontWeight = if (isSelected) FontWeight.W800 else FontWeight.W600,
-                        color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else Color.Black
+                        color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Black
                     )
                 )
             }

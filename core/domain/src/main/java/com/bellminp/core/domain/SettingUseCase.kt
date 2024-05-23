@@ -11,9 +11,9 @@ import javax.inject.Inject
 class SettingUseCase @Inject constructor(
     private val settingRepository: SettingRepository
 ) {
-     fun getSettingList(id : Long) = settingRepository.getSettingList(id)
+     fun getAllSettingList() = settingRepository.getAllSettingList()
 
-     suspend fun insertSetting(type: Int) = settingRepository.insertSetting(Setting(id = 0, type = type, name = "새 항목"))
+     suspend fun insertSetting(type: Int) = settingRepository.insertSetting(Setting(id = 0, type = type, name = ""))
 
      suspend fun updateSetting(setting: Setting) = settingRepository.updateSetting(setting)
 

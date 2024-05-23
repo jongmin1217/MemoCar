@@ -5,4 +5,10 @@
     <string name="model_name">모델명</string>
     <string name="category">카테고리</string>
     <string name="brand">브랜드</string>
+    <string name="hp">출력</string>
+    <string name="engine_cc">배기량</string>
+    <string name="top_speed">최고 속도</string>
+    <string name="acceleration_performance">가속 성능</string>
+    <string name="price">가격</string>
+    <string name="resell_price">리셀 가격</string>
 </resources>
