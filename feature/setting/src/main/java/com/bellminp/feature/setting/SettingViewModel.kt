@@ -5,13 +5,12 @@ import com.bellminp.core.common.base.BaseViewModel
 import com.bellminp.core.common.result.Result
 import com.bellminp.core.common.result.asResult
 import com.bellminp.core.domain.SettingUseCase
-import com.bellminp.core.model.data.Brand
-import com.bellminp.core.model.data.CarInfoType
 import com.bellminp.core.model.data.Setting
+import com.bellminp.core.model.data.SettingPagerData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.bellminp.core.model.data.SelectStateType.*
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
@@ -21,15 +20,17 @@ class SettingViewModel @Inject constructor(
 
     override fun handleEvents(event: SettingContract.Event) {
         when(event){
-            is SettingContract.Event.OnInsertSetting -> insertSetting(event.carInfoType)
+            is SettingContract.Event.OnInsertSetting -> insertSetting(event.insertId)
             is SettingContract.Event.OnDeleteSetting -> deleteSetting(event.setting)
             is SettingContract.Event.OnUpdateNameSetting -> updateNameSetting(event.setting, event.changedName)
+            is SettingContract.Event.OnMoveSetting -> upsertSetting(event.settingList)
         }
     }
 
 
     init {
         getSettingList()
+
     }
 
     private fun getSettingList() = viewModelScope.launch{
@@ -38,7 +39,16 @@ class SettingViewModel @Inject constructor(
                 when (it) {
                     is Result.Success -> {
                         SettingContract.SettingUiState.Success(
-                            setting = it.data
+                            settingList = listOf(
+                                SettingPagerData(CATEGORY,it.data.filter { it.type == CATEGORY.id }),
+                                SettingPagerData(BRAND,it.data.filter { it.type == BRAND.id }),
+                                SettingPagerData(ENGINE,it.data.filter { it.type == ENGINE.id }),
+                                SettingPagerData(SUPERCHARGING,it.data.filter { it.type == SUPERCHARGING.id }),
+                                SettingPagerData(ENGINE_POSITION,it.data.filter { it.type == ENGINE_POSITION.id }),
+                                SettingPagerData(DRIVE_METHOD,it.data.filter { it.type == DRIVE_METHOD.id }),
+                                SettingPagerData(TRANSMISSION,it.data.filter { it.type == TRANSMISSION.id }),
+                                SettingPagerData(DESIGN,it.data.filter { it.type == DESIGN.id })
+                            )
                         )
                     }
 
@@ -54,8 +64,8 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    private fun insertSetting(carInfoType : CarInfoType) = viewModelScope.launch {
-        settingUseCase.insertSetting(carInfoType.id)
+    private fun insertSetting(settingType : Int) = viewModelScope.launch {
+        settingUseCase.insertSetting(settingType)
     }
 
     private fun deleteSetting(setting : Setting) = viewModelScope.launch {
@@ -64,5 +74,9 @@ class SettingViewModel @Inject constructor(
 
     private fun updateNameSetting(setting: Setting, changedName : String) = viewModelScope.launch {
         settingUseCase.updateSetting(setting.copy(name = changedName))
+    }
+
+    private fun upsertSetting(settingList : List<Setting>) = viewModelScope.launch {
+        settingUseCase.upsertSetting(settingList)
     }
 }

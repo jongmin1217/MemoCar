@@ -59,9 +59,7 @@ dependencies {
     api(project(":core:data"))
     api(project(":core:model"))
     api(project(":feature:dashboard"))
-    api(project(":feature:category"))
     api(project(":feature:car"))
-    api(project(":feature:brand"))
     api(project(":feature:detail"))
     api(project(":feature:setting"))
 

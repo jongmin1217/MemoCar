@@ -41,23 +41,21 @@ import coil.compose.AsyncImage
 import com.bellminp.core.designsystem.component.SwipeContent
 import com.bellminp.core.designsystem.component.SwipeContentType
 import com.bellminp.core.designsystem.utils.textSp
-import com.bellminp.core.model.data.Brand
-import com.bellminp.core.model.data.SwipeItem
+import com.bellminp.core.model.data.Setting
 import com.kevinnzou.compose.swipebox.AnchoredDragBox
 import com.kevinnzou.compose.swipebox.DragAnchors
 import com.kevinnzou.compose.swipebox.SwipeDirection
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwipeCard(
-    item: SwipeItem,
+    item: Setting,
     isKeyboardOpen : Boolean,
     isDragging : Boolean,
     modifier: Modifier = Modifier,
-    onDeleteClick: (SwipeItem) -> Unit,
-    onNameChange : (SwipeItem, String) -> Unit
+    onDeleteClick: (Setting) -> Unit,
+    onNameChange : (Setting, String) -> Unit
 ){
     val scope = rememberCoroutineScope()
     val focusRequester = FocusRequester()
@@ -66,8 +64,8 @@ fun SwipeCard(
     var brandText by remember {
         mutableStateOf(
             TextFieldValue(
-                text = item.getItemName(),
-                selection = TextRange(item.getItemName().length)
+                text = item.name,
+                selection = TextRange(item.name.length)
             )
         )
     }
@@ -122,11 +120,11 @@ fun SwipeCard(
             Row(
                 modifier = Modifier.fillMaxSize()
             ) {
-                if(item.getImageState().isShow){
+                if(item.isShowImage){
                     Spacer(modifier = Modifier.width(5.dp))
 
                     AsyncImage(
-                        model = item.getImageState().imageUrl,
+                        model = item.imageUrl,
                         contentDescription = "brandImage",
                         modifier = Modifier
                             .size(50.dp)

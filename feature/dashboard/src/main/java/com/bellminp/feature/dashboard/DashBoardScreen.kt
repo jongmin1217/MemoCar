@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bellminp.core.designsystem.component.Tab
-import com.bellminp.core.model.data.Category
+import com.bellminp.core.model.data.Setting
 
 @Composable
 fun DashBoardRoute(
@@ -23,11 +23,11 @@ fun DashBoardRoute(
     viewModel: DashBoardViewModel = hiltViewModel()
 ) {
 
-    val categoryUiState: DashBoardContract.CategoryUiState = viewModel.viewState.value
+    val dashBoardUiState = viewModel.viewState.value
 
     DashBoardScreen(
         modifier = modifier,
-        categoryUiState = categoryUiState,
+        dashBoardUiState = dashBoardUiState,
         onSelectedId = {
             viewModel.setEvent(DashBoardContract.Event.OnSelectedId(it))
         }
@@ -37,7 +37,7 @@ fun DashBoardRoute(
 @Composable
 fun DashBoardScreen(
     modifier: Modifier = Modifier,
-    categoryUiState: DashBoardContract.CategoryUiState,
+    dashBoardUiState: DashBoardContract.DashBoardUiState,
     onSelectedId : (Long?) -> Unit
 ) {
 
@@ -45,8 +45,8 @@ fun DashBoardScreen(
         mutableStateOf<Long?>(null)
     }
 
-    fun List<Category>.findIndex(id: Long?) = indexOfFirst { category ->
-        category == find { it.id == id }
+    fun List<Setting>.findIndex(id: Long?) = indexOfFirst { setting ->
+        setting == find { it.id == id }
     }.let {
         if (it == -1) {
             tabId = get(0).id
@@ -69,21 +69,21 @@ fun DashBoardScreen(
             Column(
                 Modifier.fillMaxSize()
             ) {
-                when (categoryUiState) {
-                    is DashBoardContract.CategoryUiState.Success -> {
-                        if (categoryUiState.category.isNotEmpty()) {
+                when (dashBoardUiState) {
+                    is DashBoardContract.DashBoardUiState.Success -> {
+                        if (dashBoardUiState.setting.isNotEmpty()) {
                             Tab(
-                                tabIndex = categoryUiState.category.findIndex(tabId),
-                                tabItemList = categoryUiState.category.map { it.name },
-                                onTabIndexChange = { tabId = categoryUiState.category[it].id }
+                                tabIndex = dashBoardUiState.setting.findIndex(tabId),
+                                tabItemList = dashBoardUiState.setting.map { it.name },
+                                onTabIndexChange = { tabId = dashBoardUiState.setting[it].id }
                             )
                         }else{
                             tabId = null
                         }
                     }
 
-                    is DashBoardContract.CategoryUiState.Loading -> {}
-                    is DashBoardContract.CategoryUiState.Error -> {}
+                    is DashBoardContract.DashBoardUiState.Loading -> {}
+                    is DashBoardContract.DashBoardUiState.Error -> {}
                 }
             }
 

@@ -2,17 +2,41 @@ package com.bellminp.core.model.data
 
 
 enum class SelectStateType(
-    val index : Int,
+    val id : Int,
     val title : String
-){
-    CATEGORY(0, "카테고리"),
-    BRAND(1,"브랜드"),
-    ENGINE(2, CarInfoType.ENGINE.text),
-    SUPERCHARGING(3, CarInfoType.SUPERCHARGING.text),
-    ENGINE_POSITION(4, CarInfoType.ENGINE_POSITION.text),
-    DRIVE_METHOD(5, CarInfoType.DRIVE_METHOD.text),
-    TRANSMISSION(6, CarInfoType.TRANSMISSION.text),
-    DESIGN(7, CarInfoType.DESIGN.text)
+) : PagerItem {
+    CATEGORY(0, "카테고리") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    },
+    BRAND(1,"브랜드") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    },
+    ENGINE(2, "엔진형식") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    },
+    SUPERCHARGING(3, "과급방식") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    },
+    ENGINE_POSITION(4, "엔진위치") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    },
+    DRIVE_METHOD(5, "구동방식") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    },
+    TRANSMISSION(6, "변속기") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    },
+    DESIGN(7, "외형") {
+        override fun getTabId() = id
+        override fun getTabTile() = title
+    }
 }
 
 

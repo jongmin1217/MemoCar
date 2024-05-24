@@ -11,11 +11,9 @@ const val SETTING_ROUTE = "setting_route"
 
 fun NavController.navigateToSetting(navOptions: NavOptions? = null) = navigate(SETTING_ROUTE,navOptions)
 
-fun NavGraphBuilder.settingScreen(
-    onBackClick : () -> Unit
-) {
+fun NavGraphBuilder.settingScreen() {
 
     composable(route = SETTING_ROUTE) {
-        SettingRoute(onBackClick = onBackClick)
+        SettingRoute()
     }
 }

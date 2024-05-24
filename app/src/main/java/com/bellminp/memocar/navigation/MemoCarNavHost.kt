@@ -3,13 +3,8 @@ package com.bellminp.memocar.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.bellminp.feature.brand.navigation.brandScreen
-import com.bellminp.feature.brand.navigation.navigateToBrand
 import com.bellminp.feature.car.navigation.carScreen
-import com.bellminp.feature.car.navigation.navigateToCar
-import com.bellminp.feature.category.navigation.categoryScreen
 import com.bellminp.feature.dashboard.navigation.DASHBOARD_GRAPH_ROUTE_PATTERN
-import com.bellminp.feature.dashboard.navigation.DASHBOARD_ROUTE
 import com.bellminp.feature.dashboard.navigation.dashboardGraph
 import com.bellminp.feature.detail.navigation.detailScreen
 import com.bellminp.feature.detail.navigation.navigateToDetail
@@ -34,15 +29,12 @@ fun MemoCarNavHost(
                 detailScreen(
                     onBackClick = navController::popBackStack
                 )
-                settingScreen(
-                    onBackClick = navController::popBackStack
-                )
+
                 carScreen (
                     onBackClick = navController::popBackStack
                 )
             }
         )
-        brandScreen()
-        categoryScreen()
+        settingScreen()
     }
 }

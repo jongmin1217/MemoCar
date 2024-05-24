@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,20 +22,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bellminp.core.designsystem.utils.textSp
-import com.bellminp.core.model.data.SwipeItem
+import com.bellminp.core.model.data.Setting
 
 @Composable
 fun SelectCard(
-    item: SwipeItem,
+    item: Setting,
     selectId: Long?,
     modifier: Modifier = Modifier,
     onCLick: (Long) -> Unit,
 ) {
-    val isSelect = item.getItemId() == selectId
+    val isSelect = item.id == selectId
 
     Surface(
         modifier
@@ -51,16 +49,16 @@ fun SelectCard(
                     color = if (isSelect) MaterialTheme.colorScheme.primary else Color.Gray,
                     shape = RoundedCornerShape(4.dp)
                 )
-                .clickable { onCLick(item.getItemId()) }
+                .clickable { onCLick(item.id) }
                 .background(Color.White)
         ) {
             Row(
                 modifier = Modifier
                     .align(Alignment.Center)
             ) {
-                if(item.getImageState().isShow){
+                if(item.isShowImage){
                     AsyncImage(
-                        model = item.getImageState().imageUrl,
+                        model = item.imageUrl,
                         contentDescription = "brandImage",
                         modifier = Modifier
                             .size(35.dp)
@@ -75,7 +73,7 @@ fun SelectCard(
                 }
 
                 Text(
-                    text = item.getItemName(),
+                    text = item.name,
                     style = TextStyle(
                         fontSize = 13.dp.textSp,
                         fontWeight = if (isSelect) FontWeight.W800 else FontWeight.W500,

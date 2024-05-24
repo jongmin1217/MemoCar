@@ -23,24 +23,12 @@ class CarViewModel @Inject constructor(
         getCarUi()
     }
     private fun getCarUi() = viewModelScope.launch {
-        val categoryStream = carUseCase.getCategoryList()
-        val brandStream = carUseCase.getBrandList()
-        val settingStream = carUseCase.getAllSettingList()
-
-        combine(
-            categoryStream,
-            brandStream,
-            settingStream,
-            ::Triple
-        ).asResult().collect {
+        carUseCase.getAllSettingList().asResult().collect {
             setState {
                 when (it) {
                     is Result.Success -> {
-                        val (category, brand, setting) = it.data
                         CarContract.CarUiState.Success(
-                            category = category,
-                            brand = brand,
-                            setting = setting
+                            setting = it.data
                         )
                     }
 

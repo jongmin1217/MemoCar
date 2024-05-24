@@ -9,11 +9,17 @@ data class SettingEntity(
     @PrimaryKey(autoGenerate = true)
     val id : Long,
     val type : Int,
-    val name : String
+    val name : String,
+    val displayOrder : Int,
+    val isShowImage : Boolean,
+    val imageUrl : String?
 )
 
 fun SettingEntity.asExternalModel() = Setting(
     id = id,
     type = type,
-    name = name
+    name = name,
+    displayOrder = displayOrder,
+    isShowImage = isShowImage,
+    imageUrl = imageUrl
 )

@@ -9,3 +9,5 @@ fun transparentButtonColor() = ButtonColors(
     disabledContentColor = Color.Transparent,
     disabledContainerColor = Color.Transparent
 )
+
+fun String.color() = Color(android.graphics.Color.parseColor("#${this.substring(2,8)}"))

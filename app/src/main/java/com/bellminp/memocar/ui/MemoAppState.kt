@@ -13,14 +13,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.bellminp.core.ui.TrackDisposableJank
-import com.bellminp.feature.brand.navigation.BRAND_ROUTE
-import com.bellminp.feature.brand.navigation.navigateToBrand
 import com.bellminp.feature.car.navigation.navigateToCar
-import com.bellminp.feature.category.navigation.CATEGORY_ROUTE
-import com.bellminp.feature.category.navigation.navigateToCategory
-import com.bellminp.feature.dashboard.navigation.DASHBOARD_GRAPH_ROUTE_PATTERN
 import com.bellminp.feature.dashboard.navigation.DASHBOARD_ROUTE
 import com.bellminp.feature.dashboard.navigation.navigationToDashboardGraph
+import com.bellminp.feature.setting.navigation.SETTING_ROUTE
 import com.bellminp.feature.setting.navigation.navigateToSetting
 import com.bellminp.memocar.navigation.TopDestination
 import kotlinx.coroutines.CoroutineScope
@@ -55,8 +51,7 @@ class MemoAppState(
     val currentTopLevelDestination: TopDestination?
         @Composable get() = when (currentDestination?.route) {
             DASHBOARD_ROUTE -> TopDestination.DASHBOARD
-            BRAND_ROUTE -> TopDestination.BRAND
-            CATEGORY_ROUTE -> TopDestination.CATEGORY
+            SETTING_ROUTE -> TopDestination.SETTING
             else -> null
         }
 
@@ -74,13 +69,11 @@ class MemoAppState(
 
             when (topDestination) {
                 TopDestination.DASHBOARD -> navController.navigationToDashboardGraph(topNavOptions)
-                TopDestination.BRAND -> navController.navigateToBrand(topNavOptions)
-                TopDestination.CATEGORY -> navController.navigateToCategory(topNavOptions)
+                TopDestination.SETTING -> navController.navigateToSetting(topNavOptions)
             }
         }
     }
     fun navigateToCar() = navController.navigateToCar()
-    fun navigateToSetting() = navController.navigateToSetting()
 
 }
 

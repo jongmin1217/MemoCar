@@ -1,16 +1,13 @@
 package com.bellminp.memocar.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Build
-import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.rounded.Build
-import androidx.compose.material.icons.rounded.Create
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.bellminp.feature.dashboard.R as dashboardR
-import com.bellminp.feature.brand.R as brandR
-import com.bellminp.feature.category.R as categoryR
+import com.bellminp.feature.setting.R as settingR
 
 enum class TopDestination(
     val titleTextId: Int,
@@ -26,18 +23,11 @@ enum class TopDestination(
         unselectedIcon = Icons.Outlined.Home,
         isShowActionBtn = true
     ),
-    BRAND(
-        titleTextId = brandR.string.feature_brand,
-        iconTextId = brandR.string.feature_brand,
-        selectedIcon = Icons.Rounded.Build,
-        unselectedIcon = Icons.Outlined.Build,
-        isShowActionBtn = false
-    ),
-    CATEGORY(
-        titleTextId = categoryR.string.feature_category,
-        iconTextId = categoryR.string.feature_category,
-        selectedIcon = Icons.Rounded.Create,
-        unselectedIcon = Icons.Outlined.Create,
+    SETTING(
+        titleTextId = settingR.string.setting,
+        iconTextId = settingR.string.setting,
+        selectedIcon = Icons.Rounded.Settings,
+        unselectedIcon = Icons.Outlined.Settings,
         isShowActionBtn = false
     )
 }
