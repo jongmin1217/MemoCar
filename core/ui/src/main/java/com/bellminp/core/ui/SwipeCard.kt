@@ -52,7 +52,6 @@ import kotlinx.coroutines.launch
 fun SwipeCard(
     item: Setting,
     isKeyboardOpen : Boolean,
-    isDragging : Boolean,
     modifier: Modifier = Modifier,
     onDeleteClick: (Setting) -> Unit,
     onNameChange : (Setting, String) -> Unit
@@ -82,7 +81,6 @@ fun SwipeCard(
 
     Card(
         modifier = modifier
-            .scale(if(isDragging) 1.1f else 1f)
             .fillMaxWidth()
             .height(80.dp)
             .padding(
@@ -90,7 +88,7 @@ fun SwipeCard(
                 vertical = 10.dp
             )
             .shadow(
-                if(isDragging) 16.dp else 3.dp,
+                elevation = 3.dp,
                 shape = RoundedCornerShape(8.dp),
                 spotColor = Color(0x4A000000)
             ),

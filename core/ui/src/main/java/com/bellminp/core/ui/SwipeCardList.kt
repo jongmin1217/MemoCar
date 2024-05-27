@@ -19,7 +19,6 @@ fun LazyListScope.swipeCardList(
         SwipeCard(
             item = item,
             isKeyboardOpen = isKeyboardOpen,
-            isDragging = false,
             modifier = itemModifier,
             onDeleteClick = onDeleteClick,
             onNameChange = onNameChange

@@ -38,5 +38,6 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.kotlinx.datetime)
     kapt(libs.dagger.hilt.compiler)
+    implementation(libs.gson)
 
 }

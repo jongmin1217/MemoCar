@@ -31,6 +31,7 @@ import com.bellminp.core.designsystem.component.NavigationBar
 import com.bellminp.core.designsystem.component.NavigationBarItem
 import com.bellminp.memocar.navigation.MemoCarNavHost
 import com.bellminp.memocar.navigation.TopDestination
+import com.bellminp.feature.dashboard.R as dashboardR
 
 @ExperimentalMaterialApi
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -81,7 +82,12 @@ fun MemoCarApp(
                     actionContent = {
                         if (topDestination.isShowActionBtn) {
                             IconButton(
-                                onClick = { appState.navigateToCar() }
+                                onClick = {
+                                    when(topDestination.titleTextId){
+                                        dashboardR.string.feature_dashboard -> appState.navigateToCar()
+                                        else -> appState.navigateToAddItem()
+                                    }
+                                }
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.Add,

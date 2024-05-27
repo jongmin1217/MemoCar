@@ -13,13 +13,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.bellminp.core.ui.TrackDisposableJank
+import com.bellminp.feature.additem.navigation.navigateToAddItem
 import com.bellminp.feature.car.navigation.navigateToCar
 import com.bellminp.feature.dashboard.navigation.DASHBOARD_ROUTE
 import com.bellminp.feature.dashboard.navigation.navigationToDashboardGraph
+import com.bellminp.feature.item.navigation.ITEM_ROUTE
+import com.bellminp.feature.item.navigation.navigationToItemGraph
 import com.bellminp.feature.setting.navigation.SETTING_ROUTE
 import com.bellminp.feature.setting.navigation.navigateToSetting
 import com.bellminp.memocar.navigation.TopDestination
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.ticker
 
 @Composable
 fun rememberMemoCarState(
@@ -52,6 +56,7 @@ class MemoAppState(
         @Composable get() = when (currentDestination?.route) {
             DASHBOARD_ROUTE -> TopDestination.DASHBOARD
             SETTING_ROUTE -> TopDestination.SETTING
+            ITEM_ROUTE -> TopDestination.ITEM
             else -> null
         }
 
@@ -70,10 +75,12 @@ class MemoAppState(
             when (topDestination) {
                 TopDestination.DASHBOARD -> navController.navigationToDashboardGraph(topNavOptions)
                 TopDestination.SETTING -> navController.navigateToSetting(topNavOptions)
+                TopDestination.ITEM -> navController.navigationToItemGraph(topNavOptions)
             }
         }
     }
     fun navigateToCar() = navController.navigateToCar()
+    fun navigateToAddItem() = navController.navigateToAddItem()
 
 }
 

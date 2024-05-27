@@ -25,11 +25,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bellminp.core.designsystem.utils.textSp
+import com.bellminp.core.model.data.SelectBoxData
 import com.bellminp.core.model.data.Setting
 
 @Composable
 fun SelectCard(
-    item: Setting,
+    item: SelectBoxData,
     selectId: Long?,
     modifier: Modifier = Modifier,
     onCLick: (Long) -> Unit,

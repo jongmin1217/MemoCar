@@ -15,4 +15,11 @@ data class SettingPagerData(
     val list : List<Setting>
 )
 
+fun Setting.toSelectData() = SelectBoxData(
+    id = id,
+    name = name,
+    isShowImage = isShowImage,
+    imageUrl = imageUrl
+)
+
 

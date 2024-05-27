@@ -62,6 +62,8 @@ dependencies {
     api(project(":feature:car"))
     api(project(":feature:detail"))
     api(project(":feature:setting"))
+    api(project(":feature:item"))
+    api(project(":feature:additem"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -29,10 +29,10 @@ import java.text.DecimalFormat
 fun LabelTextField(
     modifier: Modifier = Modifier,
     text: TextFieldValue,
-    labelText: String,
-    keyboardType: KeyboardType,
-    isDecimal: Boolean,
-    descriptionText : String?,
+    labelText: String = "",
+    keyboardType: KeyboardType = KeyboardType.Text,
+    isDecimal: Boolean = false,
+    descriptionText : String? = null,
     onChangeText: (TextFieldValue) -> Unit,
 ) {
 

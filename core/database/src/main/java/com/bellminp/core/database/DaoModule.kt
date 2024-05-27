@@ -1,5 +1,6 @@
 package com.bellminp.core.database
 
+import com.bellminp.core.database.dao.ItemDao
 import com.bellminp.core.database.dao.SettingDao
 import dagger.Module
 import dagger.Provides
@@ -14,4 +15,9 @@ object DaoModule {
     fun providesSettingDao(
         database: MemoCarDatabase
     ) : SettingDao = database.settingDao()
+
+    @Provides
+    fun providesItemDao(
+        database: MemoCarDatabase
+    ) : ItemDao = database.itemDao()
 }

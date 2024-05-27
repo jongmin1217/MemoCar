@@ -15,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bellminp.core.designsystem.utils.textSp
+import com.bellminp.core.model.data.SelectBoxData
 import com.bellminp.core.model.data.Setting
 import kotlin.math.ceil
 
@@ -24,7 +25,7 @@ fun VerticalCheckList(
     modifier: Modifier = Modifier,
     title: String,
     selectId: Long?,
-    list: List<Setting>,
+    list: List<SelectBoxData>,
     onCLick: (Long?) -> Unit,
 ) {
 
